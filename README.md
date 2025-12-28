@@ -27,7 +27,8 @@ python -m src.main --web
 ```
 
 ## 📸 Screenshots
-*(Add screenshots here after running)*
+![Dashboard Preview](assets/dashboard_preview.png)
+*v3.0 Dashboard featuring Dark Mode and AI Anomaly Detection*
 
 ## 🛠️ Tech Stack
 - **Backend**: Python 3.9, Flask
