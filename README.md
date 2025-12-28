@@ -1,69 +1,39 @@
-# Middleware Health & Integration Monitor (Enterprise Edition)
+# Middleware Health Monitor Platform (v2.0)
 
-![Status](https://img.shields.io/badge/Status-Production%20Ready-success) ![Python](https://img.shields.io/badge/Python-3.9%2B-blue) ![Docker](https://img.shields.io/badge/Docker-Supported-blue)
+![Status](https://img.shields.io/badge/Version-2.0%20SaaS-blueviolet) ![License](https://img.shields.io/badge/License-MIT-green)
 
-A high-performance, containerized observability platform for banking and enterprise middleware environments. Designed to monitor REST, SOAP, and MQ services with SLA tracking and real-time visualization.
+A self-hosted, enterprise-grade observability platform. Monitor REST, SOAP, and MQ services with a built-in management interface.
 
-## 🚀 Features
+## 🌟 v2.0 New Features
+- **Admin Panel**: Manage services via Web UI (No more YAML editing!).
+- **Authentication**: Secure Login/Logout system.
+- **Database Engine**: Fully dynamic configuration using SQLite.
 
-### Core Capabilities
-- **Multi-Protocol Monitoring**: Native support for **REST**, **SOAP**, and **Message Queues (MQ)**.
-- **Parallel Execution**: Uses threaded architecture to check hundreds of services concurrently.
-- **SLA Grading**: Automatically highlights services performing below defined latency thresholds (e.g., >1s).
+## 🚀 Quick Start
 
-### Observability & UI
-- **Live OpsCenter Dashboard**: Auto-refreshing HTML5 interface with **Chart.js** latency trends.
-- **System Topology Map**: Visual dependency graph generated automatically using **Mermaid.js**.
-- **Prometheus Exporter**: Built-in `/metrics` endpoint for integration with Grafana/Cloud stacks.
-- **Alerting**: Real-time logging alerts when services go DOWN.
-
-### Architecture
-- **Tech Stack**: Python 3.9, Flask (Web UI), SQLite (History), ThreadPoolExecutor (Concurrency).
-- **Deployment**: Full Docker support with `docker-compose`.
-
-## 🛠️ Installation & Usage
-
-### Option 1: Docker (Recommended)
-The easiest way to run the full stack:
+### Docker (Recommended)
 ```bash
 docker compose up --build
 ```
-Access the dashboard at [http://localhost:5000](http://localhost:5000).
+- **Dashboard**: [http://localhost:5000](http://localhost:5000)
+- **Admin Panel**: [http://localhost:5000/settings](http://localhost:5000/settings)
+  - **User**: `admin`
+  - **Pass**: `admin123`
 
-### Option 2: Local Python
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. Run the application:
-   ```bash
-   python -m src.main --web
-   ```
-
-## ⚙️ Configuration
-
-Edit `config/services.yaml` to define your landscape.
-
-```yaml
-services:
-  - name: "Critical Payment API"
-    type: "REST"
-    url: "https://api.bank.com/payments"
-    sla_threshold: 0.5  # Warn if latency > 500ms
-
-  - name: "Legacy Mainframe"
-    type: "SOAP"
-    wsdl: "http://internal-soap/wsdl"
-    simulation_mode: true
+### Local Python
+```bash
+pip install -r requirements.txt
+python -m src.main --web
 ```
 
-## 📊 API Endpoints
+## 📸 Screenshots
+*(Add screenshots here after running)*
 
-- **Dashboard**: `/` - The main visual interface.
-- **Health JSON**: `/api/health` - Raw status data.
-- **History**: `/api/history/<service_name>` - Time-series latency data.
-- **Prometheus**: `/metrics` - Scrape target for monitoring systems.
+## 🛠️ Tech Stack
+- **Backend**: Python 3.9, Flask
+- **Database**: SQLite (Zero config required)
+- **Frontend**: Bootstrap 5, Chart.js, Mermaid.js
+- **Ops**: Docker, Threading
 
 ## 📜 License
-
-MIT License. Free for personal and commercial use.
+MIT License.

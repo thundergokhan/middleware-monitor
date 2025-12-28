@@ -31,6 +31,18 @@ class Database:
                     timestamp REAL NOT NULL
                 )
             ''')
+
+            # Create services table (v2.0)
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS services (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL UNIQUE,
+                    type TEXT NOT NULL,
+                    endpoint TEXT NOT NULL,
+                    sla_threshold REAL DEFAULT 1.0,
+                    active INTEGER DEFAULT 1
+                )
+            ''')
             
             conn.commit()
             conn.close()
@@ -98,3 +110,54 @@ class Database:
         except Exception as e:
             self.logger.error(f"Failed to get history for {service_name}: {e}")
             return []
+
+    # --- v2.0 Service Management Methods ---
+
+    def get_services(self):
+        """Fetch all active services."""
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT name, type, endpoint, sla_threshold FROM services WHERE active=1")
+            rows = cursor.fetchall()
+            conn.close()
+            
+            services = []
+            for row in rows:
+                services.append({
+                    "name": row[0],
+                    "type": row[1],
+                    "url": row[2] if row[1] == 'REST' else None, # Simplified mapping
+                    "wsdl": row[2] if row[1] == 'SOAP' else None,
+                    "queue_name": row[2] if row[1] == 'MQ' else None,
+                    "sla_threshold": row[3]
+                })
+            return services
+        except Exception as e:
+            self.logger.error(f"Failed to fetch services: {e}")
+            return []
+
+    def add_service(self, name, s_type, endpoint, sla=1.0):
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO services (name, type, endpoint, sla_threshold) VALUES (?, ?, ?, ?)", 
+                           (name, s_type, endpoint, sla))
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to add service: {e}")
+            return False
+
+    def delete_service(self, name):
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM services WHERE name=?", (name,))
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to delete service: {e}")
+            return False

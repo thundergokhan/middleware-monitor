@@ -1,9 +1,12 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 from src.utils.logger import get_logger
 from src.monitor.rest_monitor import RestMonitor
 from src.monitor.soap_monitor import SoapMonitor
 from src.monitor.mq_monitor import MqMonitor
 from src.db import Database
+from src.ai_engine import AnomalyDetector
+import concurrent.futures
 
 class MonitorEngine:
     """
@@ -11,9 +14,11 @@ class MonitorEngine:
     Supports Parallel Execution.
     """
     
-    def __init__(self):
-        self.logger = get_logger("MonitorEngine")
+    def __init__(self, db_path='monitor.db'):
+        self.logger = get_logger("Engine")
         self.db = Database()
+        self.thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=10)
+        self.ai = AnomalyDetector() # AI Brain Initialized
 
     def check_service(self, service):
         """
@@ -36,6 +41,19 @@ class MonitorEngine:
             try:
                 result = monitor.check_health()
                 
+                # --- AI Analysis ---
+                if result['status']: 
+                    is_anomaly, score, ai_msg = self.ai.analyze(result['name'], result['response_time'])
+                    result['ai_anomaly'] = is_anomaly
+                    result['ai_score'] = score
+                    result['ai_message'] = ai_msg
+                    
+                    if is_anomaly:
+                        self.logger.warning(f"🧠 AI Alert for {result['name']}: {ai_msg}")
+                else:
+                    result['ai_anomaly'] = False
+                    result['ai_message'] = "System Down"
+
                 # SLA Grading Logic
                 if result['status']:
                     sla_limit = service.get('sla_threshold', 1.0)
