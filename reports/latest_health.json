@@ -1,0 +1,64 @@
+{
+    "timestamp": 1766847300.6332211,
+    "generated_at": "Sat Dec 27 17:55:00 2025",
+    "services_checked": 3,
+    "results": [
+        {
+            "name": "Customer Data API",
+            "type": "REST",
+            "status": true,
+            "response_time": 0.2423,
+            "message": "OK (Status: 200)",
+            "timestamp": 1766847300.446321,
+            "config": {
+                "id": "srv-001",
+                "name": "Customer Data API",
+                "type": "REST",
+                "url": "https://jsonplaceholder.typicode.com/users/1",
+                "verify_ssl": true,
+                "timeout": 5,
+                "description": "Primary customer information retrieval service (Prototyped)"
+            },
+            "sla_status": "HEALTHY"
+        },
+        {
+            "name": "Legacy Accounts Service",
+            "type": "SOAP",
+            "status": true,
+            "response_time": 0.1215,
+            "message": "OK (Simulated WSDL Access)",
+            "timestamp": 1766847300.5718496,
+            "config": {
+                "id": "srv-002",
+                "name": "Legacy Accounts Service",
+                "type": "SOAP",
+                "url": "http://mock-enterprise-service.internal/accounts",
+                "simulation_mode": true,
+                "wsdl": "http://mock-enterprise-service.internal/accounts?wsdl",
+                "description": "Mainframe adapter for account balances"
+            },
+            "sla_status": "HEALTHY"
+        },
+        {
+            "name": "Payment Processing Queue",
+            "type": "MQ",
+            "status": true,
+            "response_time": 0.0508,
+            "message": "OK (Connected, Depth: 28)",
+            "timestamp": 1766847300.6275284,
+            "config": {
+                "id": "srv-003",
+                "name": "Payment Processing Queue",
+                "type": "MQ",
+                "host": "mq-cluster.finance.corp",
+                "port": 1414,
+                "queue_manager": "QM_PAYMENTS",
+                "queue_name": "INCOMING.PAYMENTS.Q",
+                "simulation_mode": true,
+                "connection_timeout": 3,
+                "description": "Critical payment instruction queue"
+            },
+            "sla_status": "HEALTHY"
+        }
+    ]
+}

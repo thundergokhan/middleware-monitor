@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  middleware-monitor:
+    build: .
+    container_name: ops-monitor
+    ports:
+      - "5000:5000"
+    volumes:
+      # Persist configuration and database
+      - ./config:/app/config
+      - ./monitor.db:/app/monitor.db
+    restart: unless-stopped

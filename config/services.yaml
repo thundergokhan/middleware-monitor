@@ -1,0 +1,32 @@
+# Middleware Services Configuration
+# Define the services to be monitored here.
+
+services:
+  - id: "srv-001"
+    name: "Customer Data API"
+    type: "REST"
+    url: "https://jsonplaceholder.typicode.com/users/1"
+    verify_ssl: true
+    timeout: 5
+    description: "Primary customer information retrieval service (Prototyped)"
+
+  - id: "srv-002"
+    name: "Legacy Accounts Service"
+    type: "SOAP"
+    url: "http://mock-enterprise-service.internal/accounts"
+    simulation_mode: true
+    wsdl: "http://mock-enterprise-service.internal/accounts?wsdl"
+    description: "Mainframe adapter for account balances"
+
+  - id: "srv-003"
+    name: "Payment Processing Queue"
+    type: "MQ"
+    host: "mq-cluster.finance.corp"
+    port: 1414
+    queue_manager: "QM_PAYMENTS"
+    queue_name: "INCOMING.PAYMENTS.Q"
+    simulation_mode: true
+    connection_timeout: 3
+    description: "Critical payment instruction queue"
+
+
